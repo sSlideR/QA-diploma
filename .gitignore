@@ -5,6 +5,7 @@ HELP.md
 build/
 data/
 .allure/
+java
 
 ### STS ###
 .apt_generated
