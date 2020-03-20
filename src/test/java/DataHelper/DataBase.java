@@ -19,13 +19,14 @@ public class DataBase {
 
     public static DataBase getDbAuthInfo() {
         String databaseUrl = System.getProperty("datasource.url");
-        return new DataBase(databaseUrl, "app", "pass");
+        String databaseUser = System.getProperty("datasource.username") == null || "".equals(System.getProperty("datasource.username")) ? "app" : System.getProperty("datasource.username");
+        String databasePassword = System.getProperty("datasource.password") == null || "".equals(System.getProperty("datasource.password")) ? "pass" : System.getProperty("datasource.password");
+        return new DataBase(databaseUrl, databaseUser, databasePassword);
     }
 
     public static OrderEntity getOrdersStateBefore() throws SQLException {
         return getLastDbItem();
     }
-
 
     public static void isNewOrderIsRecorded(OrderEntity orderEntity) throws SQLException {
         String lastOrderTime = "";

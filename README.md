@@ -24,14 +24,21 @@ _Запуск контейнеров занимает 1-2 минуты в зав
     * Для тестирования SUT в паре с MySQL базой данных:\
 ```java -Dspring.datasource.url=jdbc:mysql://localhost:3306/app -jar ./artifacts/aqa-shop.jar```
     * Для тестирования SUT в паре с PostgreSQL базой данных:\
-```java -Dspring.datasource.url=jdbc:postgresql://localhost:5432/app -jar ./artifacts/aqa-shop.jar```<br><br>
+```java -Dspring.datasource.url=jdbc:postgresql://localhost:5432/app -jar ./artifacts/aqa-shop.jar```<br>
+    * Опциональные параметры запуска SUT (по умолчанию не требуются):\
+    ```-Dspring.datasource.username= - имя пользователя БД```\
+    ```-Dspring.datasource.password= - пароль доступа к БД```<br><br>
 _Примечание: для запуска экземпляра SUT с другими параметрами, необходимо остановить запущенный экземпляр SUT._\
 _Для остановки запущенного экземпляра SUT необходимо закрыть окно терминала, из которого оно было запущено._<br><br>
 1. Запустить автоматизированное тестирование командой:
     * Для тестирования SUT в паре с MySQL базой данных:\
 ```gradlew clean test allureReport -Ddatasource.url=jdbc:mysql://localhost:3306/app```
     * Для тестирования SUT в паре с PostgreSQL базой данных:\
-```gradlew clean test allureReport -Ddatasource.url=jdbc:postgresql://localhost:5432/app```<br><br>
+```gradlew clean test allureReport -Ddatasource.url=jdbc:postgresql://localhost:5432/app```
+    * Опциональные параметры запуска тестов (по умолчанию не требуются):\
+    ```-Ddatasource.username= - имя пользователя БД```\
+    ```-Ddatasource.password= - пароль доступа к БД```\
+    ```-Dsut.url= - адрес, на котором развернут SUT (по умолчанию: http://localhost:8080)```<br><br>
 1. После проведения автоматизированного тестирования закрыть контейнеры командой:\
 ```docker-compose down```
 
