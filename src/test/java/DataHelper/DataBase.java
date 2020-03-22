@@ -49,26 +49,30 @@ public class DataBase {
         }
     }
 
-    public static void verifyEntriesAreInDbWithCard(DataProcessor.Card card, int tourPrice) throws SQLException {
-        if ("DECLINED".equals(paymentGateRequest(card.getCardNumber()))) {
-            assertNull(OrderEntity.getLastDbItem().getCredit_id());
-            assertNull(OrderEntity.getLastDbItem().getPayment_id());
-            assertEquals("DECLINED", PaymentEntity.getLastDbItem().getStatus());
-        } else {
-            assertEquals("APPROVED", PaymentEntity.getLastDbItem().getStatus());
-            assertEquals(PaymentEntity.getLastDbItem().getTransaction_id(), OrderEntity.getLastDbItem().getPayment_id());
-            assertEquals(tourPrice, PaymentEntity.getLastDbItem().getAmount());
-        }
+    public static void verifyEntriesAreInDbWithValidCard(DataProcessor.Card card, int tourPrice) throws SQLException {
+        assertEquals("APPROVED", paymentGateRequest(card.getCardNumber()));
+        assertEquals(paymentGateRequest(card.getCardNumber()), PaymentEntity.getLastDbItem().getStatus());
+        assertEquals(PaymentEntity.getLastDbItem().getTransaction_id(), OrderEntity.getLastDbItem().getPayment_id());
+        assertEquals(tourPrice, PaymentEntity.getLastDbItem().getAmount());
     }
 
-    public static void verifyEntriesAreInDbWithLoan(DataProcessor.Card card) throws SQLException {
-        if ("DECLINED".equals(creditGateRequest(card.getCardNumber()))) {
-            assertNull(OrderEntity.getLastDbItem().getCredit_id());
-            assertNull(OrderEntity.getLastDbItem().getPayment_id());
-            assertEquals("DECLINED", CreditRequestEntity.getLastDbItem().getStatus());
-        } else {
-            assertEquals("APPROVED", CreditRequestEntity.getLastDbItem().getStatus());
-            assertEquals(CreditRequestEntity.getLastDbItem().getBank_id(), OrderEntity.getLastDbItem().getCredit_id());
-        }
+    public static void verifyEntriesAreInDbWithInvalidCard(DataProcessor.Card card) throws SQLException {
+        assertEquals("DECLINED", PaymentEntity.getLastDbItem().getStatus());
+        assertEquals(paymentGateRequest(card.getCardNumber()), PaymentEntity.getLastDbItem().getStatus());
+        assertNull(OrderEntity.getLastDbItem().getCredit_id());
+        assertNull(OrderEntity.getLastDbItem().getPayment_id());
     }
+    public static void verifyEntriesAreInDbWithValidCardWithLoan(DataProcessor.Card card) throws SQLException {
+        assertEquals("APPROVED", creditGateRequest(card.getCardNumber()));
+        assertEquals(creditGateRequest(card.getCardNumber()), CreditRequestEntity.getLastDbItem().getStatus());
+        assertEquals(CreditRequestEntity.getLastDbItem().getBank_id(), OrderEntity.getLastDbItem().getCredit_id());
     }
+
+    public static void verifyEntriesAreInDbWithInvalidCardWithLoan(DataProcessor.Card card) throws SQLException {
+        assertEquals("DECLINED", CreditRequestEntity.getLastDbItem().getStatus());
+        assertEquals(creditGateRequest(card.getCardNumber()), CreditRequestEntity.getLastDbItem().getStatus());
+        assertNull(OrderEntity.getLastDbItem().getCredit_id());
+        assertNull(OrderEntity.getLastDbItem().getPayment_id());
+    }
+
+}
