@@ -53,7 +53,7 @@ public class TourPurchaseServiceTest {
         selectPurchaseWithCard();
         sendFormWithValidCardData(validCardForTest);
         isNewOrderIsRecorded(lastOrder);
-        verifyEntriesAreInDbWithCard(validCardForTest, 45000);
+        verifyEntriesAreInDbWithValidCard(validCardForTest, 45000);
     }
 
     @Test
@@ -64,7 +64,7 @@ public class TourPurchaseServiceTest {
         selectPurchaseWithCard();
         sendFormWithInvalidCardData(invalidCardForTest);
         isNewOrderIsRecorded(lastOrder);
-        verifyEntriesAreInDbWithCard(invalidCardForTest, 45000);
+        verifyEntriesAreInDbWithInvalidCard(invalidCardForTest);
     }
 
     @Test
@@ -75,7 +75,7 @@ public class TourPurchaseServiceTest {
         selectPurchaseWithLoan();
         sendFormWithValidCardData(validCardForTest);
         isNewOrderIsRecorded(lastOrder);
-        verifyEntriesAreInDbWithLoan(validCardForTest);
+        verifyEntriesAreInDbWithValidCardWithLoan(validCardForTest);
     }
 
     @Test
@@ -86,6 +86,6 @@ public class TourPurchaseServiceTest {
         selectPurchaseWithLoan();
         sendFormWithInvalidCardData(invalidCardForTest);
         isNewOrderIsRecorded(lastOrder);
-        verifyEntriesAreInDbWithLoan(invalidCardForTest);
+        verifyEntriesAreInDbWithInvalidCardWithLoan(invalidCardForTest);
     }
 }

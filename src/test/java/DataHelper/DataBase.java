@@ -61,6 +61,7 @@ public class DataBase {
         assertEquals(paymentGateRequest(card.getCardNumber()), PaymentEntity.getLastDbItem().getStatus());
         assertNull(OrderEntity.getLastDbItem().getCredit_id());
         assertNull(OrderEntity.getLastDbItem().getPayment_id());
+        assertNull(PaymentEntity.getLastDbItem().getAmount());
     }
     public static void verifyEntriesAreInDbWithValidCardWithLoan(DataProcessor.Card card) throws SQLException {
         assertEquals("APPROVED", creditGateRequest(card.getCardNumber()));
