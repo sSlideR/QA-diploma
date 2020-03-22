@@ -64,7 +64,7 @@ public class TourPurchaseServiceTest {
         selectPurchaseWithCard();
         sendFormWithInvalidCardData(invalidCardForTest);
         isNewOrderIsRecorded(lastOrder);
-        verifyEntriesAreInDbWithInvalidCard(invalidCardForTest);
+        verifyEntriesAreInDbWithInvalidCard(invalidCardForTest, 45000);
     }
 
     @Test

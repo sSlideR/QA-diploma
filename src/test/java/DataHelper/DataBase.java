@@ -56,12 +56,12 @@ public class DataBase {
         assertEquals(tourPrice, PaymentEntity.getLastDbItem().getAmount());
     }
 
-    public static void verifyEntriesAreInDbWithInvalidCard(DataProcessor.Card card) throws SQLException {
+    public static void verifyEntriesAreInDbWithInvalidCard(DataProcessor.Card card, int tourPrice) throws SQLException {
         assertEquals("DECLINED", PaymentEntity.getLastDbItem().getStatus());
         assertEquals(paymentGateRequest(card.getCardNumber()), PaymentEntity.getLastDbItem().getStatus());
         assertNull(OrderEntity.getLastDbItem().getCredit_id());
         assertNull(OrderEntity.getLastDbItem().getPayment_id());
-        assertNull(PaymentEntity.getLastDbItem().getAmount());
+        assertEquals(tourPrice, PaymentEntity.getLastDbItem().getAmount());
     }
     public static void verifyEntriesAreInDbWithValidCardWithLoan(DataProcessor.Card card) throws SQLException {
         assertEquals("APPROVED", creditGateRequest(card.getCardNumber()));
