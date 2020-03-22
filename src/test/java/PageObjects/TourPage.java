@@ -5,9 +5,11 @@ import com.codeborne.selenide.SelenideElement;
 
 import static DataHelper.DataProcessor.Card.getFakeCardForTest;
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selectors.*;
-import static com.codeborne.selenide.Selenide.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.codeborne.selenide.Selectors.byText;
+import static com.codeborne.selenide.Selectors.withText;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TourPage {
     private static SelenideElement purchaseWithCardButton = $(byText("Купить"));

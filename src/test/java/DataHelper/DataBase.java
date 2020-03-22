@@ -3,12 +3,14 @@ package DataHelper;
 import DataHelper.DataBaseElements.CreditRequestEntity;
 import DataHelper.DataBaseElements.OrderEntity;
 import DataHelper.DataBaseElements.PaymentEntity;
-import lombok.*;
+import lombok.Value;
+import lombok.val;
 
-import java.sql.*;
+import java.sql.SQLException;
 
-import static DataHelper.DataBaseElements.OrderEntity.*;
-import static DataHelper.GateApi.*;
+import static DataHelper.DataBaseElements.OrderEntity.getLastDbItem;
+import static DataHelper.GateApi.creditGateRequest;
+import static DataHelper.GateApi.paymentGateRequest;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Value

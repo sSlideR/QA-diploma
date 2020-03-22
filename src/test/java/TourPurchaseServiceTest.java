@@ -1,17 +1,18 @@
 import DataHelper.DataBaseElements.OrderEntity;
 import DataHelper.DataProcessor;
 import com.codeborne.selenide.logevents.SelenideLogger;
-import io.qameta.allure.Step;
 import io.qameta.allure.selenide.AllureSelenide;
-import lombok.*;
-import org.junit.jupiter.api.*;
+import lombok.Data;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 
 import static DataHelper.DataBase.*;
-import static DataHelper.GateApi.*;
 import static PageObjects.TourPage.*;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.open;
 
 @Data
 public class TourPurchaseServiceTest {
