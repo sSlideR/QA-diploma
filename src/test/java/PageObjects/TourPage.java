@@ -43,86 +43,102 @@ public class TourPage {
         $(byText("Кредит по данным карты")).shouldBe(visible);
     }
 
-    public static void sendFormWithValidCardData(DataProcessor.Card card) {
+    public static void fillCardNumberField(DataProcessor.Card card) {
         cardNumberField.setValue(card.getCardNumber());
+    }
+
+    public static void fillCardMonthExpirationField(DataProcessor.Card card) {
         cardMonthExpirationField.setValue(card.getCardMonthExpiration());
+    }
+
+    public static void fillCardYearExpirationField(DataProcessor.Card card) {
         cardYearExpirationField.setValue(card.getCardYearExpiration());
+    }
+
+    public static void fillCardHolderField(DataProcessor.Card card) {
         cardHolderField.setValue(card.getCardHolder());
+    }
+
+    public static void fillCardCvcCvvField(DataProcessor.Card card) {
         cardCvcCvvField.setValue(card.getCardCvcCvv());
+    }
+
+    public static void submitForm() {
         continueButton.click();
+    }
+
+    public static void assertButtonStateChangedOnSuccessfulSubmit() {
         continueButton.shouldBe(hidden);
         waitingButton.waitUntil(visible, 1000);
+    }
+
+    public static void assertButtonStateNotChangedWithErrorsInForm() {
+        assertTrue(continueButton.getText().contains("Продолжить"));
+    }
+
+    public static void assertSuccessNotificationIsVisibleIfPaymentApproved() {
         $$("div.notification").find(text("Операция одобрена банком")).waitUntil(visible, 10000);
         $$("div.notification").find(text("Ошибка! Банк отказал в операции")).waitUntil(hidden, 10000);
     }
 
-    public static void sendFormWithInvalidCardData(DataProcessor.Card card) {
-        cardNumberField.setValue(card.getCardNumber());
-        cardMonthExpirationField.setValue(card.getCardMonthExpiration());
-        cardYearExpirationField.setValue(card.getCardYearExpiration());
-        cardHolderField.setValue(card.getCardHolder());
-        cardCvcCvvField.setValue(card.getCardCvcCvv());
-        continueButton.click();
-        continueButton.shouldBe(hidden);
-        waitingButton.waitUntil(visible, 1000);
+    public static void assertRejectedNotificationIsVisibleIfPaymentDeclined() {
         $$("div.notification").find(text("Операция одобрена банком")).waitUntil(hidden, 10000);
         $$("div.notification").find(text("Ошибка! Банк отказал в операции")).waitUntil(visible, 10000);
     }
 
-    public static void sendBlankFormWithCard() {
-        selectPurchaseWithCard();
-        clearForm();
-        continueButton.click();
-        assertTrue(continueButton.getText().contains("Продолжить"));
-
+    // Валидация полей формы
+    public static void assertInvalidFormatErrorVisibleForCardNumberField() {
         cardNumberField.parent().parent().$("span.input__sub").shouldHave(exactText("Неверный формат"));
         cardNumberField.parent().parent().$("span.input__sub").shouldBe(visible);
-        cardMonthExpirationField.parent().parent().$("span.input__sub").shouldHave(exactText("Неверный формат"));
-        cardMonthExpirationField.parent().parent().$("span.input__sub").shouldBe(visible);
-        cardYearExpirationField.parent().parent().$("span.input__sub").shouldHave(exactText("Неверный формат"));
-        cardYearExpirationField.parent().parent().$("span.input__sub").shouldBe(visible);
-        cardHolderField.parent().parent().$("span.input__sub").shouldHave(exactText("Поле обязательно для заполнения"));
-        cardHolderField.parent().parent().$("span.input__sub").shouldBe(visible);
-        cardCvcCvvField.parent().parent().$("span.input__sub").shouldHave(exactText("Неверный формат"));
-        cardCvcCvvField.parent().parent().$("span.input__sub").shouldBe(visible);
     }
 
-    public static void sendBlankFormWithLoan() {
-        selectPurchaseWithLoan();
-        clearForm();
-        continueButton.click();
-        assertTrue(continueButton.getText().contains("Продолжить"));
-
-        cardNumberField.parent().parent().$("span.input__sub").shouldHave(exactText("Неверный формат"));
-        cardNumberField.parent().parent().$("span.input__sub").shouldBe(visible);
-        cardMonthExpirationField.parent().parent().$("span.input__sub").shouldHave(exactText("Неверный формат"));
-        cardMonthExpirationField.parent().parent().$("span.input__sub").shouldBe(visible);
+    public static void assertInvalidFormatErrorVisibleForCardExpirationFieldIfValid() {
         cardYearExpirationField.parent().parent().$("span.input__sub").shouldHave(exactText("Неверный формат"));
         cardYearExpirationField.parent().parent().$("span.input__sub").shouldBe(visible);
-        cardHolderField.parent().parent().$("span.input__sub").shouldHave(exactText("Поле обязательно для заполнения"));
-        cardHolderField.parent().parent().$("span.input__sub").shouldBe(visible);
-        cardCvcCvvField.parent().parent().$("span.input__sub").shouldHave(exactText("Неверный формат"));
-        cardCvcCvvField.parent().parent().$("span.input__sub").shouldBe(visible);
     }
 
-    public static void sendFormWithBrokenData() {
-        selectPurchaseWithCard();
-        clearForm();
-        cardNumberField.setValue(getFakeCardForTest().getCardNumber());
-        cardMonthExpirationField.setValue(getFakeCardForTest().getCardMonthExpiration());
-        cardYearExpirationField.setValue(getFakeCardForTest().getCardYearExpiration());
-        cardHolderField.setValue(getFakeCardForTest().getCardHolder());
-        cardCvcCvvField.setValue(getFakeCardForTest().getCardCvcCvv());
-        continueButton.click();
-        assertTrue(continueButton.getText().contains("Продолжить"));
-
-        cardNumberField.parent().parent().$("span.input__sub").shouldHave(exactText("Неверный формат"));
-        cardNumberField.parent().parent().$("span.input__sub").shouldBe(visible);
+    public static void assertInvalidFormatErrorVisibleForCardExpirationFieldIfExpired() {
         cardYearExpirationField.parent().parent().$("span.input__sub").shouldHave(exactText("Истёк срок действия карты"));
         cardYearExpirationField.parent().parent().$("span.input__sub").shouldBe(visible);
+    }
+
+    public static void assertInvalidFormatErrorVisibleForCardHolderField() {
         cardHolderField.parent().parent().$("span.input__sub").shouldHave(exactText("Поле обязательно для заполнения"));
         cardHolderField.parent().parent().$("span.input__sub").shouldBe(visible);
+    }
+
+    public static void assertInvalidFormatErrorVisibleForCardCvcCvvField() {
         cardCvcCvvField.parent().parent().$("span.input__sub").shouldHave(exactText("Неверный формат"));
         cardCvcCvvField.parent().parent().$("span.input__sub").shouldBe(visible);
     }
+
+    // Проверка на отсутствие уведомлений при правильном заполнении поля
+    public static void assertInvalidFormatErrorInvisibleForCardNumberField() {
+        cardNumberField.parent().parent().$("span.input__sub").shouldHave(exactText("Неверный формат"));
+        cardNumberField.parent().parent().$("span.input__sub").shouldBe(hidden);
+    }
+
+    public static void assertInvalidFormatErrorInvisibleForCardExpirationFieldIfValid() {
+        cardYearExpirationField.parent().parent().$("span.input__sub").shouldHave(exactText("Неверный формат"));
+        cardYearExpirationField.parent().parent().$("span.input__sub").shouldBe(hidden);
+    }
+
+    public static void assertInvalidFormatErrorInvisibleForCardExpirationFieldIfExpired() {
+        cardYearExpirationField.parent().parent().$("span.input__sub").shouldHave(exactText("Истёк срок действия карты"));
+        cardYearExpirationField.parent().parent().$("span.input__sub").shouldBe(hidden);
+    }
+
+    public static void assertInvalidFormatErrorInvisibleForCardHolderField() {
+        cardHolderField.parent().parent().$("span.input__sub").shouldHave(exactText("Поле обязательно для заполнения"));
+        cardHolderField.parent().parent().$("span.input__sub").shouldBe(hidden);
+    }
+
+    public static void assertInvalidFormatErrorInvisibleForCardCvcCvvField() {
+        cardCvcCvvField.parent().parent().$("span.input__sub").shouldHave(exactText("Неверный формат"));
+        cardCvcCvvField.parent().parent().$("span.input__sub").shouldBe(hidden);
+    }
+
 }
+
+
+
