@@ -23,8 +23,22 @@ public class DataProcessor {
             return new Card("4444 4444 4444 4442", "10", "22", "Stepan Ivanov", "321");
         }
 
-        public static Card getFakeCardForTest() {
-            return new Card("4444 4444 4444 444", "08", "15", "", "12");
+        class CardFaker {
+            public Card getCardWithShortenedCardNumber() {
+                return new Card("4444 4444 4444 444", "", "", "", "");
+            }
+
+            public Card getCardWithExpiredDates() {
+                return new Card("", "10", "10", "", "");
+            }
+
+            public Card getCardWithZeroDates() {
+                return new Card("", "00", "00", "", "");
+            }
+
+            public Card getCardWithShortenedCvcCvv() {
+                return new Card("", "", "", "", "12");
+            }
         }
     }
 }
