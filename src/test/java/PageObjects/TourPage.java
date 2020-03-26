@@ -3,7 +3,6 @@ package PageObjects;
 import DataHelper.DataProcessor;
 import com.codeborne.selenide.SelenideElement;
 
-import static DataHelper.DataProcessor.Card.getFakeCardForTest;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.withText;
