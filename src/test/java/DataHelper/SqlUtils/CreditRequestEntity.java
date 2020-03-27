@@ -1,10 +1,8 @@
 package DataHelper.SqlUtils;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
-@AllArgsConstructor
+@Data
 class CreditRequestEntity {
     private String id;
     private String bank_id;

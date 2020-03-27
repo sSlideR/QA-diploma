@@ -1,11 +1,9 @@
 package DataHelper.SqlUtils;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
-@AllArgsConstructor
-public class OrderEntity {
+@Data
+class OrderEntity {
     private String id;
     private String created;
     private String credit_id;

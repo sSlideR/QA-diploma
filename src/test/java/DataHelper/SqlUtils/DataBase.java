@@ -11,6 +11,9 @@ import java.sql.SQLException;
 
 import static DataHelper.GateApi.creditGateRequest;
 import static DataHelper.GateApi.paymentGateRequest;
+import static DataHelper.SqlUtils.DataBase.CreditRequestEntityItem.getLastDbItemFromCreditRequestEntity;
+import static DataHelper.SqlUtils.DataBase.OrderEntityItem.getLastDbItemFromOrderEntity;
+import static DataHelper.SqlUtils.DataBase.PaymentEntityItem.getLastDbItemFromPaymentEntity;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Value
@@ -19,55 +22,54 @@ public class DataBase {
     private String dBUser;
     private String dBUserPass;
 
-    protected static DataBase getDbAuthInfo() {
+    private static DataBase getDbAuthInfo() {
         String databaseUrl = System.getProperty("datasource.url");
         String databaseUser = System.getProperty("datasource.username") == null || "".equals(System.getProperty("datasource.username")) ? "app" : System.getProperty("datasource.username");
         String databasePassword = System.getProperty("datasource.password") == null || "".equals(System.getProperty("datasource.password")) ? "pass" : System.getProperty("datasource.password");
         return new DataBase(databaseUrl, databaseUser, databasePassword);
     }
 
-    public static OrderEntity getLastDbItemFromOrderEntityBeforeTest() throws SQLException {
-        return getLastDbItemFromOrderEntity();
-    }
-
-    protected static CreditRequestEntity getLastDbItemFromCreditRequestEntity() throws SQLException {
-        val dataBase = getDbAuthInfo();
-        val runner = new QueryRunner();
-        try (
-                val conn = DriverManager.getConnection(dataBase.getDBUrl(), dataBase.getDBUser(), dataBase.getDBUserPass());
-        ) {
-            val result = runner.query(conn, "SELECT * FROM credit_request_entity ORDER BY created DESC", new BeanHandler<>(CreditRequestEntity.class));
-            return result;
+    public static class CreditRequestEntityItem extends CreditRequestEntity {
+        public static CreditRequestEntity getLastDbItemFromCreditRequestEntity() throws SQLException {
+            val dataBase = getDbAuthInfo();
+            val runner = new QueryRunner();
+            try (
+                    val conn = DriverManager.getConnection(dataBase.getDBUrl(), dataBase.getDBUser(), dataBase.getDBUserPass())
+            ) {
+                return runner.query(conn, "SELECT * FROM credit_request_entity ORDER BY created DESC", new BeanHandler<>(CreditRequestEntityItem.class));
+            }
         }
     }
 
-    protected static OrderEntity getLastDbItemFromOrderEntity() throws SQLException {
-        val dataBase = getDbAuthInfo();
+    public static class OrderEntityItem extends OrderEntity {
+        public static OrderEntityItem getLastDbItemFromOrderEntity() throws SQLException {
+            val dataBase = getDbAuthInfo();
 
-        val runner = new QueryRunner();
-        try (
-                val conn = DriverManager.getConnection(dataBase.getDBUrl(), dataBase.getDBUser(), dataBase.getDBUserPass());
-        ) {
-            val result = runner.query(conn, "SELECT * FROM order_entity ORDER BY created DESC", new BeanHandler<>(OrderEntity.class));
-            return result;
+            val runner = new QueryRunner();
+            try (
+                    val conn = DriverManager.getConnection(dataBase.getDBUrl(), dataBase.getDBUser(), dataBase.getDBUserPass())
+            ) {
+                return runner.query(conn, "SELECT * FROM order_entity ORDER BY created DESC", new BeanHandler<>(OrderEntityItem.class));
+            }
         }
     }
 
-    protected static PaymentEntity getLastDbItemFromPaymentEntity() throws SQLException {
-        val dataBase = getDbAuthInfo();
+    public static class PaymentEntityItem extends PaymentEntity {
+        public static PaymentEntity getLastDbItemFromPaymentEntity() throws SQLException {
+            val dataBase = getDbAuthInfo();
 
-        val runner = new QueryRunner();
-        try (
-                val conn = DriverManager.getConnection(dataBase.getDBUrl(), dataBase.getDBUser(), dataBase.getDBUserPass());
-        ) {
-            val result = runner.query(conn, "SELECT * FROM payment_entity ORDER BY created DESC", new BeanHandler<>(PaymentEntity.class));
-            return result;
+            val runner = new QueryRunner();
+            try (
+                    val conn = DriverManager.getConnection(dataBase.getDBUrl(), dataBase.getDBUser(), dataBase.getDBUserPass())
+            ) {
+                return runner.query(conn, "SELECT * FROM payment_entity ORDER BY created DESC", new BeanHandler<>(PaymentEntityItem.class));
+            }
         }
     }
 
-    public static void isNewOrderIsRecorded(OrderEntity orderEntity) throws SQLException {
-        String lastOrderTime = "";
-        String lastOrderId = "";
+    public static void assertNewOrderIsRecordedInDb(OrderEntity orderEntity) throws SQLException {
+        String lastOrderTime;
+        String lastOrderId;
 
         if (orderEntity != null) {
             lastOrderTime = orderEntity.getCreated();
@@ -84,19 +86,21 @@ public class DataBase {
         }
     }
 
-    public static void verifyEntriesAreInDbWithValidCard(DataProcessor.Card card, int tourPrice) throws SQLException {
+    public static void verifyEntriesAreInDbWithValidCard(DataProcessor.Card card) throws SQLException {
         assertEquals("APPROVED", paymentGateRequest(card.getCardNumber()));
         assertEquals(paymentGateRequest(card.getCardNumber()), getLastDbItemFromPaymentEntity().getStatus());
         assertEquals(getLastDbItemFromPaymentEntity().getTransaction_id(), getLastDbItemFromOrderEntity().getPayment_id());
+    }
+
+    public static void assertAmountOfPurchaseInDbEqualsToTourPrice(int tourPrice) throws SQLException {
         assertEquals(tourPrice, getLastDbItemFromPaymentEntity().getAmount());
     }
 
-    public static void verifyEntriesAreInDbWithInvalidCard(DataProcessor.Card card, int tourPrice) throws SQLException {
+    public static void verifyEntriesAreInDbWithInvalidCard(DataProcessor.Card card) throws SQLException {
         assertEquals("DECLINED", getLastDbItemFromPaymentEntity().getStatus());
         assertEquals(paymentGateRequest(card.getCardNumber()), getLastDbItemFromPaymentEntity().getStatus());
         assertNull(getLastDbItemFromOrderEntity().getCredit_id());
         assertNull(getLastDbItemFromOrderEntity().getPayment_id());
-        assertEquals(tourPrice, getLastDbItemFromPaymentEntity().getAmount());
     }
 
     public static void verifyEntriesAreInDbWithValidCardWithLoan(DataProcessor.Card card) throws SQLException {
