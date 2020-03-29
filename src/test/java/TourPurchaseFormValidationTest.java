@@ -3,14 +3,12 @@ import DataHelper.SqlUtils.DataBase;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
 import lombok.Data;
-import lombok.val;
 import org.junit.jupiter.api.*;
 
 import java.sql.SQLException;
 
 import static DataHelper.SqlUtils.DataBase.OrderEntityItem.getLastDbItemFromOrderEntity;
 import static DataHelper.SqlUtils.DataBase.assertNewOrderIsNotRecordedInDb;
-import static DataHelper.SqlUtils.DataBase.assertNewOrderIsRecordedInDb;
 import static PageObjects.TourPage.*;
 import static com.codeborne.selenide.Selenide.open;
 
