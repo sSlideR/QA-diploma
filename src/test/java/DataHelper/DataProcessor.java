@@ -23,20 +23,24 @@ public class DataProcessor {
             return new Card("4444 4444 4444 4442", "10", "22", "Stepan Ivanov", "321");
         }
 
-        class CardFaker {
-            public Card getCardWithShortenedCardNumber() {
+        public static Card getUnexpectedCardForTest() {
+            return new Card("4444 4444 4444 4443", "10", "22", "Stepan Ivanov", "321");
+        }
+
+        static public class CardFaker {
+            public static Card getCardWithShortenedCardNumber() {
                 return new Card("4444 4444 4444 444", "", "", "", "");
             }
 
-            public Card getCardWithExpiredDates() {
+            public static Card getCardWithExpiredDates() {
                 return new Card("", "10", "10", "", "");
             }
 
-            public Card getCardWithZeroDates() {
+            public static Card getCardWithZeroDates() {
                 return new Card("", "00", "00", "", "");
             }
 
-            public Card getCardWithShortenedCvcCvv() {
+            public static Card getCardWithShortenedCvcCvv() {
                 return new Card("", "", "", "", "12");
             }
         }

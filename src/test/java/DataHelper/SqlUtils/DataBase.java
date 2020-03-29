@@ -86,6 +86,22 @@ public class DataBase {
         }
     }
 
+    public static void assertNewOrderIsNotRecordedInDb(OrderEntity orderEntity) throws SQLException {
+        String lastOrderTime;
+        String lastOrderId;
+
+        if (orderEntity != null) {
+            lastOrderTime = orderEntity.getCreated();
+            lastOrderId = orderEntity.getId();
+            val currentOrderTime = getLastDbItemFromOrderEntity().getCreated();
+            val currentOrderId = getLastDbItemFromOrderEntity().getId();
+            val result = (lastOrderTime.equals(currentOrderTime)) && (lastOrderId.equals(currentOrderId));
+            assertTrue(result);
+        } else {
+            assertNull(getLastDbItemFromOrderEntity());
+        }
+    }
+
     public static void verifyEntriesAreInDbWithValidCard(DataProcessor.Card card) throws SQLException {
         assertEquals("APPROVED", paymentGateRequest(card.getCardNumber()));
         assertEquals(paymentGateRequest(card.getCardNumber()), getLastDbItemFromPaymentEntity().getStatus());
