@@ -111,32 +111,6 @@ public class TourPage {
         cardCvcCvvField.parent().parent().$("span.input__sub").shouldBe(visible);
     }
 
-    // Проверка на отсутствие уведомлений при правильном заполнении поля
-    public static void assertInvalidFormatErrorInvisibleForCardNumberField() {
-        cardNumberField.parent().parent().$("span.input__sub").shouldHave(exactText("Неверный формат"));
-        cardNumberField.parent().parent().$("span.input__sub").shouldBe(hidden);
-    }
-
-    public static void assertInvalidFormatErrorInvisibleForCardExpirationFieldIfValid() {
-        cardYearExpirationField.parent().parent().$("span.input__sub").shouldHave(exactText("Неверный формат"));
-        cardYearExpirationField.parent().parent().$("span.input__sub").shouldBe(hidden);
-    }
-
-    public static void assertInvalidFormatErrorInvisibleForCardExpirationFieldIfExpired() {
-        cardYearExpirationField.parent().parent().$("span.input__sub").shouldHave(exactText("Истёк срок действия карты"));
-        cardYearExpirationField.parent().parent().$("span.input__sub").shouldBe(hidden);
-    }
-
-    public static void assertInvalidFormatErrorInvisibleForCardHolderField() {
-        cardHolderField.parent().parent().$("span.input__sub").shouldHave(exactText("Поле обязательно для заполнения"));
-        cardHolderField.parent().parent().$("span.input__sub").shouldBe(hidden);
-    }
-
-    public static void assertInvalidFormatErrorInvisibleForCardCvcCvvField() {
-        cardCvcCvvField.parent().parent().$("span.input__sub").shouldHave(exactText("Неверный формат"));
-        cardCvcCvvField.parent().parent().$("span.input__sub").shouldBe(hidden);
-    }
-
 }
 
 
