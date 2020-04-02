@@ -25,7 +25,7 @@ _Запуск контейнеров занимает 1-2 минуты в зав
 ```java -Dspring.datasource.url=jdbc:mysql://localhost:3306/app -jar ./artifacts/aqa-shop.jar```
     * Для тестирования SUT в паре с PostgreSQL базой данных:\
 ```java -Dspring.datasource.url=jdbc:postgresql://localhost:5432/app -jar ./artifacts/aqa-shop.jar```<br>
-    * Опциональные параметры запуска SUT (по умолчанию не требуются):\
+    * Опциональные параметры запуска SUT:\
     ```-Dspring.datasource.url= - адрес БД (по умолчанию - MySQL) ```\
     ```-Dspring.datasource.username= - имя пользователя БД```\
     ```-Dspring.datasource.password= - пароль доступа к БД```<br><br>
