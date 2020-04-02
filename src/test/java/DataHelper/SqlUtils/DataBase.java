@@ -11,9 +11,6 @@ import java.sql.SQLException;
 
 import static DataHelper.GateApi.creditGateRequest;
 import static DataHelper.GateApi.paymentGateRequest;
-import static DataHelper.SqlUtils.DataBase.CreditRequestEntityItem.getLastDbItemFromCreditRequestEntity;
-import static DataHelper.SqlUtils.DataBase.OrderEntityItem.getLastDbItemFromOrderEntity;
-import static DataHelper.SqlUtils.DataBase.PaymentEntityItem.getLastDbItemFromPaymentEntity;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Value
@@ -22,36 +19,31 @@ public class DataBase {
     static final String databaseUser = System.getProperty("datasource.username", "app");
     static final String databasePassword = System.getProperty("datasource.password", "pass");
 
-    public static class CreditRequestEntityItem extends CreditRequestEntity {
-        public static CreditRequestEntity getLastDbItemFromCreditRequestEntity() throws SQLException {
-            val runner = new QueryRunner();
-            try (
-                    val conn = DriverManager.getConnection(databaseUrl, databaseUser, databasePassword)
-            ) {
-                return runner.query(conn, "SELECT * FROM credit_request_entity ORDER BY created DESC", new BeanHandler<>(CreditRequestEntityItem.class));
-            }
+    public static CreditRequestEntity getLastDbItemFromCreditRequestEntity() throws SQLException {
+        val runner = new QueryRunner();
+        try (
+                val conn = DriverManager.getConnection(databaseUrl, databaseUser, databasePassword)
+        ) {
+            return runner.query(conn, "SELECT * FROM credit_request_entity ORDER BY created DESC", new BeanHandler<>(CreditRequestEntity.class));
         }
     }
 
-    public static class OrderEntityItem extends OrderEntity {
-        public static OrderEntityItem getLastDbItemFromOrderEntity() throws SQLException {
-            val runner = new QueryRunner();
-            try (
-                    val conn = DriverManager.getConnection(databaseUrl, databaseUser, databasePassword)
-            ) {
-                return runner.query(conn, "SELECT * FROM order_entity ORDER BY created DESC", new BeanHandler<>(OrderEntityItem.class));
-            }
+
+    public static OrderEntity getLastDbItemFromOrderEntity() throws SQLException {
+        val runner = new QueryRunner();
+        try (
+                val conn = DriverManager.getConnection(databaseUrl, databaseUser, databasePassword)
+        ) {
+            return runner.query(conn, "SELECT * FROM order_entity ORDER BY created DESC", new BeanHandler<>(OrderEntity.class));
         }
     }
 
-    public static class PaymentEntityItem extends PaymentEntity {
-        public static PaymentEntity getLastDbItemFromPaymentEntity() throws SQLException {
-            val runner = new QueryRunner();
-            try (
-                    val conn = DriverManager.getConnection(databaseUrl, databaseUser, databasePassword)
-            ) {
-                return runner.query(conn, "SELECT * FROM payment_entity ORDER BY created DESC", new BeanHandler<>(PaymentEntityItem.class));
-            }
+    public static PaymentEntity getLastDbItemFromPaymentEntity() throws SQLException {
+        val runner = new QueryRunner();
+        try (
+                val conn = DriverManager.getConnection(databaseUrl, databaseUser, databasePassword)
+        ) {
+            return runner.query(conn, "SELECT * FROM payment_entity ORDER BY created DESC", new BeanHandler<>(PaymentEntity.class));
         }
     }
 
