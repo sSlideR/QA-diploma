@@ -43,4 +43,7 @@ test {
     systemProperty 'datasource.username', System.getProperty('datasource.username')
     systemProperty 'datasource.password', System.getProperty('datasource.password')
     systemProperty 'sut.url', System.getProperty('sut.url')
+    systemProperty 'sut.port', System.getProperty('sut.port')
+    systemProperty 'api.url', System.getProperty('api.url')
+    systemProperty 'api.port', System.getProperty('api.port')
 }
