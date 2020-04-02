@@ -29,8 +29,9 @@ public class TourPurchaseServiceTest {
 
     @BeforeEach
     void openBrowser() {
-        String sutUrl = (System.getProperty("sut.url") == null || "".equals(System.getProperty("sut.url"))) ? "http://localhost:8080" : System.getProperty("sut.url");
-        open(sutUrl);
+        String sutUrl = System.getProperty("sut.url", "http://localhost");
+        String sutPort = System.getProperty("sut.port", "8080");
+        open(String.format("%s:%s", sutUrl, sutPort));
     }
 
     @Test

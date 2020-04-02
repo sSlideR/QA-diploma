@@ -15,8 +15,8 @@ public final class GateApi {
     }
 
     private static RequestSpecification requestSpec = new RequestSpecBuilder()
-            .setBaseUri("http://localhost")
-            .setPort(9999)
+            .setBaseUri(System.getProperty("api.url","http://localhost"))
+            .setPort(Integer.parseInt(System.getProperty("api.port","9999")))
             .setAccept(ContentType.JSON)
             .setContentType(ContentType.JSON)
             .log(LogDetail.ALL)
