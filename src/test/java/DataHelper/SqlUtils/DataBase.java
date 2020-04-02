@@ -18,23 +18,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Value
 public class DataBase {
-    private String dBUrl;
-    private String dBUser;
-    private String dBUserPass;
-
-    private static DataBase getDbAuthInfo() {
-        String databaseUrl = System.getProperty("datasource.url");
-        String databaseUser = System.getProperty("datasource.username") == null || "".equals(System.getProperty("datasource.username")) ? "app" : System.getProperty("datasource.username");
-        String databasePassword = System.getProperty("datasource.password") == null || "".equals(System.getProperty("datasource.password")) ? "pass" : System.getProperty("datasource.password");
-        return new DataBase(databaseUrl, databaseUser, databasePassword);
-    }
+    static final String databaseUrl = System.getProperty("datasource.url", "jdbc:mysql://localhost:3306/app");
+    static final String databaseUser = System.getProperty("datasource.username", "app");
+    static final String databasePassword = System.getProperty("datasource.password", "pass");
 
     public static class CreditRequestEntityItem extends CreditRequestEntity {
         public static CreditRequestEntity getLastDbItemFromCreditRequestEntity() throws SQLException {
-            val dataBase = getDbAuthInfo();
             val runner = new QueryRunner();
             try (
-                    val conn = DriverManager.getConnection(dataBase.getDBUrl(), dataBase.getDBUser(), dataBase.getDBUserPass())
+                    val conn = DriverManager.getConnection(databaseUrl, databaseUser, databasePassword)
             ) {
                 return runner.query(conn, "SELECT * FROM credit_request_entity ORDER BY created DESC", new BeanHandler<>(CreditRequestEntityItem.class));
             }
@@ -43,11 +35,9 @@ public class DataBase {
 
     public static class OrderEntityItem extends OrderEntity {
         public static OrderEntityItem getLastDbItemFromOrderEntity() throws SQLException {
-            val dataBase = getDbAuthInfo();
-
             val runner = new QueryRunner();
             try (
-                    val conn = DriverManager.getConnection(dataBase.getDBUrl(), dataBase.getDBUser(), dataBase.getDBUserPass())
+                    val conn = DriverManager.getConnection(databaseUrl, databaseUser, databasePassword)
             ) {
                 return runner.query(conn, "SELECT * FROM order_entity ORDER BY created DESC", new BeanHandler<>(OrderEntityItem.class));
             }
@@ -56,11 +46,9 @@ public class DataBase {
 
     public static class PaymentEntityItem extends PaymentEntity {
         public static PaymentEntity getLastDbItemFromPaymentEntity() throws SQLException {
-            val dataBase = getDbAuthInfo();
-
             val runner = new QueryRunner();
             try (
-                    val conn = DriverManager.getConnection(dataBase.getDBUrl(), dataBase.getDBUser(), dataBase.getDBUserPass())
+                    val conn = DriverManager.getConnection(databaseUrl, databaseUser, databasePassword)
             ) {
                 return runner.query(conn, "SELECT * FROM payment_entity ORDER BY created DESC", new BeanHandler<>(PaymentEntityItem.class));
             }
