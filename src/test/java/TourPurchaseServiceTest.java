@@ -1,5 +1,6 @@
 import DataHelper.DataProcessor;
-import DataHelper.SqlUtils.DataBase;
+import DataHelper.SqlUtils.OrderEntity;
+import PageObjects.TourPage;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
 import lombok.Data;
@@ -8,10 +9,8 @@ import org.junit.jupiter.api.*;
 import java.sql.SQLException;
 
 import static DataHelper.SqlUtils.DataBase.*;
-import static DataHelper.SqlUtils.DataBase.OrderEntityItem.getLastDbItemFromOrderEntity;
+import static DataHelper.SqlUtils.DataBase.getLastDbItemFromOrderEntity;
 
-
-import static PageObjects.TourPage.*;
 import static com.codeborne.selenide.Selenide.open;
 
 @DisplayName("Service test")
@@ -36,19 +35,20 @@ public class TourPurchaseServiceTest {
 
     @Test
     void purchaseWithValidCardShouldBeSuccess() throws SQLException {
+        TourPage tourPage = new TourPage();
         DataProcessor.Card validCardForTest = DataProcessor.Card.getValidCardForTest();
+        OrderEntity lastOrder = getLastDbItemFromOrderEntity();
 
-        DataBase.OrderEntityItem lastOrder = getLastDbItemFromOrderEntity();
-        selectPurchaseWithCard();
-        fillCardNumberField(validCardForTest);
-        fillCardMonthExpirationField(validCardForTest);
-        fillCardYearExpirationField(validCardForTest);
-        fillCardHolderField(validCardForTest);
-        fillCardCvcCvvField(validCardForTest);
-        submitForm();
-        assertButtonStateChangedOnSuccessfulSubmit();
+        tourPage.selectPurchaseWithCard();
+        tourPage.fillCardNumberField(validCardForTest);
+        tourPage.fillCardMonthExpirationField(validCardForTest);
+        tourPage.fillCardYearExpirationField(validCardForTest);
+        tourPage.fillCardHolderField(validCardForTest);
+        tourPage.fillCardCvcCvvField(validCardForTest);
+        tourPage.submitForm();
+        tourPage.assertButtonStateChangedOnSuccessfulSubmit();
 
-        assertSuccessNotificationIsVisibleIfPaymentApproved();
+        tourPage.assertSuccessNotificationIsVisibleIfPaymentApproved();
         assertNewOrderIsRecordedInDb(lastOrder);
         verifyEntriesAreInDbWithValidCard(validCardForTest);
         assertAmountOfPurchaseInDbEqualsToTourPrice(45000);
@@ -56,19 +56,20 @@ public class TourPurchaseServiceTest {
 
     @Test
     void purchaseWithInvalidCardShouldBeDenied() throws SQLException {
+        TourPage tourPage = new TourPage();
         DataProcessor.Card invalidCardForTest = DataProcessor.Card.getInvalidCardForTest();
+        OrderEntity lastOrder = getLastDbItemFromOrderEntity();
 
-        DataBase.OrderEntityItem lastOrder = getLastDbItemFromOrderEntity();
-        selectPurchaseWithCard();
-        fillCardNumberField(invalidCardForTest);
-        fillCardMonthExpirationField(invalidCardForTest);
-        fillCardYearExpirationField(invalidCardForTest);
-        fillCardHolderField(invalidCardForTest);
-        fillCardCvcCvvField(invalidCardForTest);
-        submitForm();
-        assertButtonStateChangedOnSuccessfulSubmit();
+        tourPage.selectPurchaseWithCard();
+        tourPage.fillCardNumberField(invalidCardForTest);
+        tourPage.fillCardMonthExpirationField(invalidCardForTest);
+        tourPage.fillCardYearExpirationField(invalidCardForTest);
+        tourPage.fillCardHolderField(invalidCardForTest);
+        tourPage.fillCardCvcCvvField(invalidCardForTest);
+        tourPage.submitForm();
+        tourPage.assertButtonStateChangedOnSuccessfulSubmit();
 
-        assertRejectedNotificationIsVisibleIfPaymentDeclined();
+        tourPage.assertRejectedNotificationIsVisibleIfPaymentDeclined();
         assertNewOrderIsRecordedInDb(lastOrder);
         verifyEntriesAreInDbWithInvalidCard(invalidCardForTest);
         assertAmountOfPurchaseInDbEqualsToTourPrice(45000);
@@ -76,76 +77,80 @@ public class TourPurchaseServiceTest {
 
     @Test
     void purchaseWithLoanWithValidCardShouldBeSuccess() throws SQLException {
+        TourPage tourPage = new TourPage();
         DataProcessor.Card validCardForTest = DataProcessor.Card.getValidCardForTest();
+        OrderEntity lastOrder = getLastDbItemFromOrderEntity();
 
-        DataBase.OrderEntityItem lastOrder = getLastDbItemFromOrderEntity();
-        selectPurchaseWithLoan();
-        fillCardNumberField(validCardForTest);
-        fillCardMonthExpirationField(validCardForTest);
-        fillCardYearExpirationField(validCardForTest);
-        fillCardHolderField(validCardForTest);
-        fillCardCvcCvvField(validCardForTest);
-        submitForm();
-        assertButtonStateChangedOnSuccessfulSubmit();
+        tourPage.selectPurchaseWithLoan();
+        tourPage.fillCardNumberField(validCardForTest);
+        tourPage.fillCardMonthExpirationField(validCardForTest);
+        tourPage.fillCardYearExpirationField(validCardForTest);
+        tourPage.fillCardHolderField(validCardForTest);
+        tourPage.fillCardCvcCvvField(validCardForTest);
+        tourPage.submitForm();
+        tourPage.assertButtonStateChangedOnSuccessfulSubmit();
 
-        assertSuccessNotificationIsVisibleIfPaymentApproved();
+        tourPage.assertSuccessNotificationIsVisibleIfPaymentApproved();
         assertNewOrderIsRecordedInDb(lastOrder);
         verifyEntriesAreInDbWithValidCardWithLoan(validCardForTest);
     }
 
     @Test
     void purchaseWithLoanWithInvalidCardShouldBeDenied() throws SQLException {
+        TourPage tourPage = new TourPage();
         DataProcessor.Card invalidCardForTest = DataProcessor.Card.getInvalidCardForTest();
+        OrderEntity lastOrder = getLastDbItemFromOrderEntity();
 
-        DataBase.OrderEntityItem lastOrder = getLastDbItemFromOrderEntity();
-        selectPurchaseWithLoan();
-        fillCardNumberField(invalidCardForTest);
-        fillCardMonthExpirationField(invalidCardForTest);
-        fillCardYearExpirationField(invalidCardForTest);
-        fillCardHolderField(invalidCardForTest);
-        fillCardCvcCvvField(invalidCardForTest);
-        submitForm();
-        assertButtonStateChangedOnSuccessfulSubmit();
+        tourPage.selectPurchaseWithLoan();
+        tourPage.fillCardNumberField(invalidCardForTest);
+        tourPage.fillCardMonthExpirationField(invalidCardForTest);
+        tourPage.fillCardYearExpirationField(invalidCardForTest);
+        tourPage.fillCardHolderField(invalidCardForTest);
+        tourPage.fillCardCvcCvvField(invalidCardForTest);
+        tourPage.submitForm();
+        tourPage.assertButtonStateChangedOnSuccessfulSubmit();
 
-        assertRejectedNotificationIsVisibleIfPaymentDeclined();
+        tourPage.assertRejectedNotificationIsVisibleIfPaymentDeclined();
         assertNewOrderIsRecordedInDb(lastOrder);
         verifyEntriesAreInDbWithInvalidCardWithLoan(invalidCardForTest);
     }
 
     @Test
     void purchaseWithUnexpectedCardShouldBeDenied() throws SQLException {
+        TourPage tourPage = new TourPage();
         DataProcessor.Card invalidCardForTest = DataProcessor.Card.getUnexpectedCardForTest();
+        OrderEntity lastOrder = getLastDbItemFromOrderEntity();
 
-        DataBase.OrderEntityItem lastOrder = getLastDbItemFromOrderEntity();
-        selectPurchaseWithCard();
-        fillCardNumberField(invalidCardForTest);
-        fillCardMonthExpirationField(invalidCardForTest);
-        fillCardYearExpirationField(invalidCardForTest);
-        fillCardHolderField(invalidCardForTest);
-        fillCardCvcCvvField(invalidCardForTest);
-        submitForm();
-        assertButtonStateChangedOnSuccessfulSubmit();
+        tourPage.selectPurchaseWithCard();
+        tourPage.fillCardNumberField(invalidCardForTest);
+        tourPage.fillCardMonthExpirationField(invalidCardForTest);
+        tourPage.fillCardYearExpirationField(invalidCardForTest);
+        tourPage.fillCardHolderField(invalidCardForTest);
+        tourPage.fillCardCvcCvvField(invalidCardForTest);
+        tourPage.submitForm();
+        tourPage.assertButtonStateChangedOnSuccessfulSubmit();
 
-        assertRejectedNotificationIsVisibleIfPaymentDeclined();
+        tourPage.assertRejectedNotificationIsVisibleIfPaymentDeclined();
         assertNewOrderIsRecordedInDb(lastOrder);
         verifyEntriesAreInDbWithInvalidCard(invalidCardForTest);
         assertAmountOfPurchaseInDbEqualsToTourPrice(45000);
     }
     @Test
     void purchaseWithLoanWithUnexpectedCardShouldBeDenied() throws SQLException {
+        TourPage tourPage = new TourPage();
         DataProcessor.Card invalidCardForTest = DataProcessor.Card.getUnexpectedCardForTest();
+        OrderEntity lastOrder = getLastDbItemFromOrderEntity();
 
-        DataBase.OrderEntityItem lastOrder = getLastDbItemFromOrderEntity();
-        selectPurchaseWithLoan();
-        fillCardNumberField(invalidCardForTest);
-        fillCardMonthExpirationField(invalidCardForTest);
-        fillCardYearExpirationField(invalidCardForTest);
-        fillCardHolderField(invalidCardForTest);
-        fillCardCvcCvvField(invalidCardForTest);
-        submitForm();
-        assertButtonStateChangedOnSuccessfulSubmit();
+        tourPage.selectPurchaseWithLoan();
+        tourPage.fillCardNumberField(invalidCardForTest);
+        tourPage.fillCardMonthExpirationField(invalidCardForTest);
+        tourPage.fillCardYearExpirationField(invalidCardForTest);
+        tourPage.fillCardHolderField(invalidCardForTest);
+        tourPage.fillCardCvcCvvField(invalidCardForTest);
+        tourPage.submitForm();
+        tourPage.assertButtonStateChangedOnSuccessfulSubmit();
 
-        assertRejectedNotificationIsVisibleIfPaymentDeclined();
+        tourPage.assertRejectedNotificationIsVisibleIfPaymentDeclined();
         assertNewOrderIsRecordedInDb(lastOrder);
         verifyEntriesAreInDbWithInvalidCardWithLoan(invalidCardForTest);
     }
