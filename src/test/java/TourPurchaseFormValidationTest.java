@@ -1,5 +1,4 @@
 import DataHelper.DataProcessor;
-import DataHelper.SqlUtils.DataBase;
 import DataHelper.SqlUtils.OrderEntity;
 import PageObjects.TourPage;
 import com.codeborne.selenide.logevents.SelenideLogger;
@@ -9,9 +8,9 @@ import org.junit.jupiter.api.*;
 
 import java.sql.SQLException;
 
-import static DataHelper.SqlUtils.DataBase.assertNewOrderIsNotRecordedInDb;
 import static DataHelper.SqlUtils.DataBase.getLastDbItemFromOrderEntity;
 import static com.codeborne.selenide.Selenide.open;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("Form validation")
 @Data
@@ -28,8 +27,8 @@ public class TourPurchaseFormValidationTest {
 
     @BeforeEach
     void openBrowser() {
-        String sutUrl = System.getProperty("sut.url", "http://localhost");
-        String sutPort = System.getProperty("sut.port", "8080");
+        String sutUrl = System.getProperty("sut.url");
+        String sutPort = System.getProperty("sut.port");
         open(String.format("%s:%s", sutUrl, sutPort));
     }
 
@@ -43,7 +42,7 @@ public class TourPurchaseFormValidationTest {
         tourPage.submitForm();
 
         tourPage.assertButtonStateNotChangedWithErrorsInForm();
-        assertNewOrderIsNotRecordedInDb(lastOrder);
+        assertEquals(lastOrder, getLastDbItemFromOrderEntity());
         tourPage.assertInvalidFormatErrorVisibleForCardExpirationFieldIfValid();
         tourPage.assertInvalidFormatErrorVisibleForCardHolderField();
         tourPage.assertInvalidFormatErrorVisibleForCardCvcCvvField();
@@ -61,7 +60,7 @@ public class TourPurchaseFormValidationTest {
         tourPage.submitForm();
 
         tourPage.assertButtonStateNotChangedWithErrorsInForm();
-        assertNewOrderIsNotRecordedInDb(lastOrder);
+        assertEquals(lastOrder, getLastDbItemFromOrderEntity());
         tourPage.assertInvalidFormatErrorVisibleForCardExpirationFieldIfValid();
         tourPage.assertInvalidFormatErrorVisibleForCardHolderField();
         tourPage.assertInvalidFormatErrorVisibleForCardCvcCvvField();

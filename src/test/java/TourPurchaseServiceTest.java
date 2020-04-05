@@ -12,6 +12,7 @@ import static DataHelper.SqlUtils.DataBase.*;
 import static DataHelper.SqlUtils.DataBase.getLastDbItemFromOrderEntity;
 
 import static com.codeborne.selenide.Selenide.open;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @DisplayName("Service test")
 @Data
@@ -28,8 +29,8 @@ public class TourPurchaseServiceTest {
 
     @BeforeEach
     void openBrowser() {
-        String sutUrl = System.getProperty("sut.url", "http://localhost");
-        String sutPort = System.getProperty("sut.port", "8080");
+        String sutUrl = System.getProperty("sut.url");
+        String sutPort = System.getProperty("sut.port");
         open(String.format("%s:%s", sutUrl, sutPort));
     }
 
@@ -49,7 +50,7 @@ public class TourPurchaseServiceTest {
         tourPage.assertButtonStateChangedOnSuccessfulSubmit();
 
         tourPage.assertSuccessNotificationIsVisibleIfPaymentApproved();
-        assertNewOrderIsRecordedInDb(lastOrder);
+        assertNotEquals(lastOrder, getLastDbItemFromOrderEntity());
         verifyEntriesAreInDbWithValidCard(validCardForTest);
         assertAmountOfPurchaseInDbEqualsToTourPrice(45000);
     }
@@ -70,7 +71,7 @@ public class TourPurchaseServiceTest {
         tourPage.assertButtonStateChangedOnSuccessfulSubmit();
 
         tourPage.assertRejectedNotificationIsVisibleIfPaymentDeclined();
-        assertNewOrderIsRecordedInDb(lastOrder);
+        assertNotEquals(lastOrder, getLastDbItemFromOrderEntity());
         verifyEntriesAreInDbWithInvalidCard(invalidCardForTest);
         assertAmountOfPurchaseInDbEqualsToTourPrice(45000);
     }
@@ -91,7 +92,7 @@ public class TourPurchaseServiceTest {
         tourPage.assertButtonStateChangedOnSuccessfulSubmit();
 
         tourPage.assertSuccessNotificationIsVisibleIfPaymentApproved();
-        assertNewOrderIsRecordedInDb(lastOrder);
+        assertNotEquals(lastOrder, getLastDbItemFromOrderEntity());
         verifyEntriesAreInDbWithValidCardWithLoan(validCardForTest);
     }
 
@@ -111,7 +112,7 @@ public class TourPurchaseServiceTest {
         tourPage.assertButtonStateChangedOnSuccessfulSubmit();
 
         tourPage.assertRejectedNotificationIsVisibleIfPaymentDeclined();
-        assertNewOrderIsRecordedInDb(lastOrder);
+        assertNotEquals(lastOrder, getLastDbItemFromOrderEntity());
         verifyEntriesAreInDbWithInvalidCardWithLoan(invalidCardForTest);
     }
 
@@ -131,7 +132,7 @@ public class TourPurchaseServiceTest {
         tourPage.assertButtonStateChangedOnSuccessfulSubmit();
 
         tourPage.assertRejectedNotificationIsVisibleIfPaymentDeclined();
-        assertNewOrderIsRecordedInDb(lastOrder);
+        assertNotEquals(lastOrder, getLastDbItemFromOrderEntity());
         verifyEntriesAreInDbWithInvalidCard(invalidCardForTest);
         assertAmountOfPurchaseInDbEqualsToTourPrice(45000);
     }
@@ -151,7 +152,7 @@ public class TourPurchaseServiceTest {
         tourPage.assertButtonStateChangedOnSuccessfulSubmit();
 
         tourPage.assertRejectedNotificationIsVisibleIfPaymentDeclined();
-        assertNewOrderIsRecordedInDb(lastOrder);
+        assertNotEquals(lastOrder, getLastDbItemFromOrderEntity());
         verifyEntriesAreInDbWithInvalidCardWithLoan(invalidCardForTest);
     }
 }
