@@ -1,14 +1,10 @@
 package DataHelper.SqlUtils;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Data;
 
 import java.util.Objects;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
+@Data
 public class OrderEntity {
     private String id;
     private String created;

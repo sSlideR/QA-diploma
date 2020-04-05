@@ -1,8 +1,8 @@
 package DataHelper.SqlUtils;
 
-import lombok.Value;
+import lombok.Data;
 
-@Value
+@Data
 public class PaymentEntity {
     private String id;
     private int amount;
