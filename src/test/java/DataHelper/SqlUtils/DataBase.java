@@ -47,36 +47,17 @@ public class DataBase {
         }
     }
 
-    public static void assertNewOrderIsRecordedInDb(OrderEntity orderEntity) throws SQLException {
-        String lastOrderTime;
-        String lastOrderId;
-
-        if (orderEntity != null) {
-            lastOrderTime = orderEntity.getCreated();
-            lastOrderId = orderEntity.getId();
-            val currentOrderTime = getLastDbItemFromOrderEntity().getCreated();
-            val currentOrderId = getLastDbItemFromOrderEntity().getId();
-            val result = (!lastOrderTime.equals(currentOrderTime)) && (!lastOrderId.equals(currentOrderId));
-            assertTrue(result);
+    public static void assertNewOrderIsRecordedInDb(OrderEntity orderEntityBeforeTest) throws SQLException {
+        if (orderEntityBeforeTest != null) {
+            assertNotEquals(orderEntityBeforeTest, getLastDbItemFromOrderEntity());
         } else {
-            val currentOrderTime = getLastDbItemFromOrderEntity().getCreated();
-            val currentOrderId = getLastDbItemFromOrderEntity().getId();
-            assertNotNull(currentOrderTime);
-            assertNotNull(currentOrderId);
+            assertNotNull(getLastDbItemFromOrderEntity());
         }
     }
 
-    public static void assertNewOrderIsNotRecordedInDb(OrderEntity orderEntity) throws SQLException {
-        String lastOrderTime;
-        String lastOrderId;
-
-        if (orderEntity != null) {
-            lastOrderTime = orderEntity.getCreated();
-            lastOrderId = orderEntity.getId();
-            val currentOrderTime = getLastDbItemFromOrderEntity().getCreated();
-            val currentOrderId = getLastDbItemFromOrderEntity().getId();
-            val result = (lastOrderTime.equals(currentOrderTime)) && (lastOrderId.equals(currentOrderId));
-            assertTrue(result);
+    public static void assertNewOrderIsNotRecordedInDb(OrderEntity orderEntityBeforeTest) throws SQLException {
+        if (orderEntityBeforeTest != null) {
+            assertEquals(orderEntityBeforeTest, getLastDbItemFromOrderEntity());
         } else {
             assertNull(getLastDbItemFromOrderEntity());
         }
