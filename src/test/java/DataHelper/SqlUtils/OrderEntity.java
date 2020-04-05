@@ -1,10 +1,10 @@
 package DataHelper.SqlUtils;
 
-import lombok.Data;
+import lombok.Value;
 
 import java.util.Objects;
 
-@Data
+@Value
 public class OrderEntity {
     private String id;
     private String created;

@@ -1,9 +1,9 @@
 package DataHelper.SqlUtils;
 
-import lombok.Data;
+import lombok.Value;
 
-@Data
-class CreditRequestEntity {
+@Value
+public class CreditRequestEntity {
     private String id;
     private String bank_id;
     private String created;
