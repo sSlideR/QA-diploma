@@ -1,5 +1,7 @@
 import DataHelper.DataProcessor;
 import DataHelper.SqlUtils.DataBase;
+import DataHelper.SqlUtils.OrderEntity;
+import PageObjects.TourPage;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
 import lombok.Data;
@@ -7,9 +9,8 @@ import org.junit.jupiter.api.*;
 
 import java.sql.SQLException;
 
-import static DataHelper.SqlUtils.DataBase.OrderEntityItem.getLastDbItemFromOrderEntity;
 import static DataHelper.SqlUtils.DataBase.assertNewOrderIsNotRecordedInDb;
-import static PageObjects.TourPage.*;
+import static DataHelper.SqlUtils.DataBase.getLastDbItemFromOrderEntity;
 import static com.codeborne.selenide.Selenide.open;
 
 @DisplayName("Form validation")
@@ -34,104 +35,110 @@ public class TourPurchaseFormValidationTest {
 
     @Test
     void blankFormShouldntBeSendWithCard() throws SQLException {
-        DataBase.OrderEntityItem lastOrder = getLastDbItemFromOrderEntity();
+        TourPage tourPage = new TourPage();
+        OrderEntity lastOrder = getLastDbItemFromOrderEntity();
 
-        selectPurchaseWithCard();
-        clearForm();
-        submitForm();
+        tourPage.selectPurchaseWithCard();
+        tourPage.clearForm();
+        tourPage.submitForm();
 
-        assertButtonStateNotChangedWithErrorsInForm();
+        tourPage.assertButtonStateNotChangedWithErrorsInForm();
         assertNewOrderIsNotRecordedInDb(lastOrder);
-        assertInvalidFormatErrorVisibleForCardExpirationFieldIfValid();
-        assertInvalidFormatErrorVisibleForCardHolderField();
-        assertInvalidFormatErrorVisibleForCardCvcCvvField();
-        assertInvalidFormatErrorVisibleForCardNumberField();
-        assertInvalidFormatErrorVisibleForCardCvcCvvField();
+        tourPage.assertInvalidFormatErrorVisibleForCardExpirationFieldIfValid();
+        tourPage.assertInvalidFormatErrorVisibleForCardHolderField();
+        tourPage.assertInvalidFormatErrorVisibleForCardCvcCvvField();
+        tourPage.assertInvalidFormatErrorVisibleForCardNumberField();
+        tourPage.assertInvalidFormatErrorVisibleForCardCvcCvvField();
     }
 
     @Test
     void blankFormShouldntBeSendWithLoan() throws SQLException {
-        DataBase.OrderEntityItem lastOrder = getLastDbItemFromOrderEntity();
+        TourPage tourPage = new TourPage();
+        OrderEntity lastOrder = getLastDbItemFromOrderEntity();
 
-        selectPurchaseWithLoan();
-        clearForm();
-        submitForm();
+        tourPage.selectPurchaseWithLoan();
+        tourPage.clearForm();
+        tourPage.submitForm();
 
-        assertButtonStateNotChangedWithErrorsInForm();
+        tourPage.assertButtonStateNotChangedWithErrorsInForm();
         assertNewOrderIsNotRecordedInDb(lastOrder);
-        assertInvalidFormatErrorVisibleForCardExpirationFieldIfValid();
-        assertInvalidFormatErrorVisibleForCardHolderField();
-        assertInvalidFormatErrorVisibleForCardCvcCvvField();
-        assertInvalidFormatErrorVisibleForCardNumberField();
-        assertInvalidFormatErrorVisibleForCardCvcCvvField();
+        tourPage.assertInvalidFormatErrorVisibleForCardExpirationFieldIfValid();
+        tourPage.assertInvalidFormatErrorVisibleForCardHolderField();
+        tourPage.assertInvalidFormatErrorVisibleForCardCvcCvvField();
+        tourPage.assertInvalidFormatErrorVisibleForCardNumberField();
+        tourPage.assertInvalidFormatErrorVisibleForCardCvcCvvField();
     }
 
     @Test
     void errorNotificationShouldBeVisibleIfShortenedCardNumberInsertedInCardNumberField() {
+        TourPage tourPage = new TourPage();
         DataProcessor.Card validCardForTest = DataProcessor.Card.getValidCardForTest();
         DataProcessor.Card brokenCardForTest = DataProcessor.Card.CardFaker.getCardWithShortenedCardNumber();
 
-        selectPurchaseWithCard();
-        fillCardNumberField(brokenCardForTest);
-        fillCardMonthExpirationField(validCardForTest);
-        fillCardYearExpirationField(validCardForTest);
-        fillCardHolderField(validCardForTest);
-        fillCardCvcCvvField(validCardForTest);
-        submitForm();
+        tourPage.selectPurchaseWithCard();
+        tourPage.fillCardNumberField(brokenCardForTest);
+        tourPage.fillCardMonthExpirationField(validCardForTest);
+        tourPage.fillCardYearExpirationField(validCardForTest);
+        tourPage.fillCardHolderField(validCardForTest);
+        tourPage.fillCardCvcCvvField(validCardForTest);
+        tourPage.submitForm();
 
-        assertInvalidFormatErrorVisibleForCardNumberField();
-        assertButtonStateNotChangedWithErrorsInForm();
+        tourPage.assertInvalidFormatErrorVisibleForCardNumberField();
+        tourPage.assertButtonStateNotChangedWithErrorsInForm();
     }
 
     @Test
     void errorNotificationShouldBeVisibleIfExpiredCardDueDatesInsertedInExpirationFields() {
+        TourPage tourPage = new TourPage();
         DataProcessor.Card validCardForTest = DataProcessor.Card.getValidCardForTest();
         DataProcessor.Card brokenCardForTest = DataProcessor.Card.CardFaker.getCardWithExpiredDates();
 
-        selectPurchaseWithCard();
-        fillCardNumberField(validCardForTest);
-        fillCardMonthExpirationField(brokenCardForTest);
-        fillCardYearExpirationField(brokenCardForTest);
-        fillCardHolderField(validCardForTest);
-        fillCardCvcCvvField(validCardForTest);
-        submitForm();
+        tourPage.selectPurchaseWithCard();
+        tourPage.fillCardNumberField(validCardForTest);
+        tourPage.fillCardMonthExpirationField(brokenCardForTest);
+        tourPage.fillCardYearExpirationField(brokenCardForTest);
+        tourPage.fillCardHolderField(validCardForTest);
+        tourPage.fillCardCvcCvvField(validCardForTest);
+        tourPage.submitForm();
 
-        assertInvalidFormatErrorVisibleForCardExpirationFieldIfExpired();
-        assertButtonStateNotChangedWithErrorsInForm();
+        tourPage.assertInvalidFormatErrorVisibleForCardExpirationFieldIfExpired();
+        tourPage.assertButtonStateNotChangedWithErrorsInForm();
     }
 
     @Test
     void errorNotificationShouldBeVisibleIfZeroDatesInsertedInExpirationFields() {
+        TourPage tourPage = new TourPage();
         DataProcessor.Card validCardForTest = DataProcessor.Card.getValidCardForTest();
         DataProcessor.Card brokenCardForTest = DataProcessor.Card.CardFaker.getCardWithZeroDates();
 
-        selectPurchaseWithCard();
-        fillCardNumberField(validCardForTest);
-        fillCardMonthExpirationField(brokenCardForTest);
-        fillCardYearExpirationField(brokenCardForTest);
-        fillCardHolderField(validCardForTest);
-        fillCardCvcCvvField(validCardForTest);
-        submitForm();
+        tourPage.selectPurchaseWithCard();
+        tourPage.fillCardNumberField(validCardForTest);
+        tourPage.fillCardMonthExpirationField(brokenCardForTest);
+        tourPage.fillCardYearExpirationField(brokenCardForTest);
+        tourPage.fillCardHolderField(validCardForTest);
+        tourPage.fillCardCvcCvvField(validCardForTest);
+        tourPage.submitForm();
 
-        assertInvalidFormatErrorVisibleForCardExpirationFieldIfValid();
-        assertButtonStateNotChangedWithErrorsInForm();
+        tourPage.assertInvalidFormatErrorVisibleForCardExpirationFieldIfValid();
+        tourPage.assertButtonStateNotChangedWithErrorsInForm();
     }
 
     @Test
     void errorNotificationShouldBeVisibleIfShortenedCvcCvvInsertedInCardCvcCvvField() {
+        TourPage tourPage = new TourPage();
         DataProcessor.Card validCardForTest = DataProcessor.Card.getValidCardForTest();
         DataProcessor.Card brokenCardForTest = DataProcessor.Card.CardFaker.getCardWithShortenedCvcCvv();
 
-        selectPurchaseWithCard();
-        fillCardNumberField(validCardForTest);
-        fillCardMonthExpirationField(validCardForTest);
-        fillCardYearExpirationField(validCardForTest);
-        fillCardHolderField(validCardForTest);
-        fillCardCvcCvvField(brokenCardForTest);
-        submitForm();
+        tourPage.selectPurchaseWithCard();
+        tourPage.fillCardNumberField(validCardForTest);
+        tourPage.fillCardMonthExpirationField(validCardForTest);
+        tourPage.fillCardYearExpirationField(validCardForTest);
+        tourPage.fillCardHolderField(validCardForTest);
+        tourPage.fillCardCvcCvvField(brokenCardForTest);
+        tourPage.submitForm();
 
-        assertInvalidFormatErrorVisibleForCardCvcCvvField();
-        assertButtonStateNotChangedWithErrorsInForm();
+        tourPage.assertInvalidFormatErrorVisibleForCardCvcCvvField();
+        tourPage.assertButtonStateNotChangedWithErrorsInForm();
     }
 
 }
