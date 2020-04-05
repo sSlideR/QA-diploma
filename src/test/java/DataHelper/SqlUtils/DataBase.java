@@ -15,9 +15,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Value
 public class DataBase {
-    static final String databaseUrl = System.getProperty("datasource.url", "jdbc:mysql://localhost:3306/app");
-    static final String databaseUser = System.getProperty("datasource.username", "app");
-    static final String databasePassword = System.getProperty("datasource.password", "pass");
+    static String databaseUrl = System.getProperty("datasource.url");
+    static String databaseUser = System.getProperty("datasource.username");
+    static String databasePassword = System.getProperty("datasource.password");
 
     public static CreditRequestEntity getLastDbItemFromCreditRequestEntity() throws SQLException {
         val runner = new QueryRunner();
@@ -44,22 +44,6 @@ public class DataBase {
                 val conn = DriverManager.getConnection(databaseUrl, databaseUser, databasePassword)
         ) {
             return runner.query(conn, "SELECT * FROM payment_entity ORDER BY created DESC", new BeanHandler<>(PaymentEntity.class));
-        }
-    }
-
-    public static void assertNewOrderIsRecordedInDb(OrderEntity orderEntityBeforeTest) throws SQLException {
-        if (orderEntityBeforeTest != null) {
-            assertNotEquals(orderEntityBeforeTest, getLastDbItemFromOrderEntity());
-        } else {
-            assertNotNull(getLastDbItemFromOrderEntity());
-        }
-    }
-
-    public static void assertNewOrderIsNotRecordedInDb(OrderEntity orderEntityBeforeTest) throws SQLException {
-        if (orderEntityBeforeTest != null) {
-            assertEquals(orderEntityBeforeTest, getLastDbItemFromOrderEntity());
-        } else {
-            assertNull(getLastDbItemFromOrderEntity());
         }
     }
 
