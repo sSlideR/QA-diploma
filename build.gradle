@@ -39,11 +39,11 @@ dependencies {
 test {
     useJUnitPlatform()
     systemProperty 'selenide.headless', System.getProperty('selenide.headless')
-    systemProperty 'datasource.url', System.getProperty('datasource.url')
-    systemProperty 'datasource.username', System.getProperty('datasource.username')
-    systemProperty 'datasource.password', System.getProperty('datasource.password')
-    systemProperty 'sut.url', System.getProperty('sut.url')
-    systemProperty 'sut.port', System.getProperty('sut.port')
-    systemProperty 'api.url', System.getProperty('api.url')
-    systemProperty 'api.port', System.getProperty('api.port')
+    systemProperty 'datasource.url', System.getProperty('datasource.url', 'jdbc:mysql://localhost:3306/app')
+    systemProperty 'datasource.username', System.getProperty('datasource.username', 'app')
+    systemProperty 'datasource.password', System.getProperty('datasource.password', 'pass')
+    systemProperty 'sut.url', System.getProperty('sut.url', 'http://localhost')
+    systemProperty 'sut.port', System.getProperty('sut.port', '8080')
+    systemProperty 'api.url', System.getProperty('api.url', 'http://localhost')
+    systemProperty 'api.port', System.getProperty('api.port', '9999')
 }
