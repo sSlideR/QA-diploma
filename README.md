@@ -3,8 +3,8 @@
 
 ## Документация по проекту
 [Plan.md](documents/Plan.md) - планирование процедур по автоматизации и подготовке отчётной документации.\
-[Report.md](documents/Report.md) - отчёт по итогам тестирования. \[ToDo\] \
-[Summary.md](documents/Summary.md) - отчёт о результатах автоматизации. \[ToDo\]
+[Report.md](documents/Report.md) - отчёт по итогам тестирования. \
+[Summary.md](documents/Summary.md) - отчёт о результатах автоматизации.
 
 ## Тестирование
 
